@@ -1,0 +1,41 @@
+pipeline
+{
+    agent any
+    
+     tools {
+             nodejs "nodejs 18.11.0"
+    } //tools closing
+
+//CheckOutCode
+ stages{
+    stage('CheckOutCode') {
+        steps {
+        git credentialsId: '4b312874-5421-4b96-9d54-2defed346e14', url: 'https://github.com/shafiya57/nodejs-app-shf.git'
+        } //steps closing
+    } //stage closing
+    
+//Build    
+    stage('Build') {
+        steps {
+            sh "npm install"
+        } //steps closing
+    } //stage closing
+
+//Execute SonarQube Report
+    stage('ExecuteSonarQubeReport') {
+        steps {
+            sh "npm run sonar"
+        } //steps closing
+    } //stage closing
+
+//Upload Artifacts To Nexus Server
+   stage('UploadToNexusServer') {
+       steps {
+           sh "npm publish"
+       } //steps closing
+   } //stage closing
+ } //stages closing
+} //pipeline closing
+
+
+
